@@ -6,6 +6,7 @@ const loadLessons = () => {
 };
 loadLessons();
 
+
 const displayLesson = (lessons) => {  //lessons -> array of object receive kortese 5nbr line theke
   // 1.get the container & empty
   const levelContainer = document.getElementById("lavel-container");
@@ -15,7 +16,7 @@ const displayLesson = (lessons) => {  //lessons -> array of object receive korte
     // 3.create Element
     const btnDiv = document.createElement("div");
     btnDiv.innerHTML = `
-        <button onclick = 'loadLevelWord(${lesson.level_no})' class="btn btn-outline btn-primary"><i class="fa-solid fa-book-open"></i> lesson - ${lesson.level_no}</button>
+        <button id='lesson-btn-${lesson.level_no}' onclick = 'loadLevelWord(${lesson.level_no})' class="btn btn-outline btn-primary lesson-btn"><i class="fa-solid fa-book-open"></i> lesson - ${lesson.level_no}</button>
     `;
     // 4.append into container
     levelContainer.append(btnDiv);
@@ -23,6 +24,12 @@ const displayLesson = (lessons) => {  //lessons -> array of object receive korte
 };
 
 
+//button remove active
+const removeActive = () =>{
+    const lessonButtons = document.querySelectorAll('.lesson-btn')
+    // console.log(lessonButtons);
+    lessonButtons.forEach(btn=> btn.classList.remove('active'))
+}
 
 
 
@@ -33,7 +40,13 @@ const loadLevelWord = (lesson_id) => {
   // console.log(url)
   fetch(url)
     .then((res) => res.json())
-    .then((data) => displayLevelWord(data.data)); //.data eita holo API er
+    .then((data) => {
+        removeActive(); //remove all active class
+        //selected button er color fixed korar jonno id dhorbo active class er jonno
+        const clickBtn = document.getElementById(`lesson-btn-${lesson_id}`);
+        clickBtn.classList.add('active'); // add active class
+        displayLevelWord(data.data);//.data eita holo API er
+    }); 
 };
 // loadLevelWord();
 
