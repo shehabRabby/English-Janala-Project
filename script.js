@@ -24,6 +24,8 @@ const displayLesson = (lessons) => {  //lessons -> array of object receive korte
 
 
 
+
+
 //lesson e click korle API theke leson wise data anar jonno ei fuction go 18 nbr line button Onclick = loadLeavelWord()
 const loadLevelWord = (lesson_id) => {
   // console.log(lesson_id);
@@ -33,14 +35,27 @@ const loadLevelWord = (lesson_id) => {
     .then((res) => res.json())
     .then((data) => displayLevelWord(data.data)); //.data eita holo API er
 };
+// loadLevelWord();
 
-loadLevelWord();
 
 const displayLevelWord = (lessonWord) => {
   // console.log(lessonWord);
   // 1.get the container & empty
   const wordContainer = document.getElementById("word-container");
   wordContainer.innerHTML = "";
+
+  if(lessonWord.length == 0){
+    // alert('No Word Detected'); //for checkig
+      wordContainer.innerHTML = `
+        <div class="text-center bg-sky-50 col-span-full rounded-xl py-10 space-y-3 font-bangla">
+            <img src="assets/alert-error.png" alt="" class="mx-auto">
+            <p class="text-xl font-medium">এই Lesson এ এখনও কোন Vocabulary যুক্ত করা হয়নি</p>
+            <h2 class="text-2xl font-semibold">নেক্সট Lesson Select করুন।</h2>
+        </div>
+      `;
+    return;
+  }
+
 
   // 2.get into every lessons here we use ForEach Loop
   lessonWord.forEach((element) => {
@@ -49,10 +64,10 @@ const displayLevelWord = (lessonWord) => {
     const card = document.createElement("div");
     card.innerHTML = `
         <div class="bg-white rounded-xl text-center shadow-sm py-5 px-3 space-y-4">
-            <h2 class="font-bold text-2xl">${element.word}</h2>
+            <h2 class="font-bold text-2xl">${element.word ? element.word  : 'শব্দ পাওয়া যায়নি'}</h2>
             <p class="font-medium">Meaning/Pronunciation</p>
             <div class="font-medium font-bangla text-xl">
-                "${element.meaning}/${element.pronunciation}"
+                "${element.meaning ? element.meaning : 'অর্থ পাওয়া যায়নি'}/${element.pronunciation?element.pronunciation:'Pronunciation পাওয়া যায়নি'}"
             </div>
             <div class="flex justify-between items-center">
                 <button class="btn bg-sky-100 hover:bg-sky-300"><i class="fa-solid fa-circle-info"></i></button>
